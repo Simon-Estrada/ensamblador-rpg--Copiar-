@@ -154,7 +154,7 @@ Compílalo con `nasm -f elf64` y `ld`. Pega en `entrega.md` el código completo 
 - c) 60
 - d) 2
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: El numero de llamada al sistema para sys_write es el 1, por ende la respuesta correcta es la `b) 1`  ]
 
 ---
 
@@ -165,7 +165,7 @@ Compílalo con `nasm -f elf64` y `ld`. Pega en `entrega.md` el código completo 
 - c) `rax`
 - d) `rdx`
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: El numero del syscall se pone en el registro `RAX`, por lo tanto la respuesta correcta es la `c) rax`]
 
 ---
 
@@ -176,7 +176,7 @@ Compílalo con `nasm -f elf64` y `ld`. Pega en `entrega.md` el código completo 
 - c) `.bss`
 - d) `.rodata`
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: Se usa en la seccion .bss, esta seccion se usa para declarar variables y reservar espacio. La respuesta correcta es `c) .bss` ]
 
 ---
 
@@ -187,7 +187,7 @@ Compílalo con `nasm -f elf64` y `ld`. Pega en `entrega.md` el código completo 
 - c) El tamaño del buffer
 - d) El código de error
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: El valor de retorno de rax es la cantidad de bytes leidos realmente en el ejemplo de Gandalf son 7 caracteres mas el salto de linea, entonces el valor de retorno de rax seria 8. La respuesta correcta es `b)` ]
 
 ---
 
@@ -198,7 +198,7 @@ Compílalo con `nasm -f elf64` y `ld`. Pega en `entrega.md` el código completo 
 - c) `cmp` + `jge`
 - d) `sub`
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: Al abrir el archivo de la clase 3 hay una linea que dice **cmp byte [v_used], 6 jge .elite**, esto quiere decir que el programa determina el nivel del heroe basandose en lo gastado contra el 6. La respuesra correcta es `c)`]
 
 ---
 
