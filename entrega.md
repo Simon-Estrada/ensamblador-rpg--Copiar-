@@ -1,5 +1,44 @@
 # Solucion Parcial 1 Fundamentos
-## A1
+## A1 Solucion - El despertar
+### A.1.1
+Para este ejercicio se pedia compilar y ejecutar la clase 1. Mostrando comandos de compilación y enlazado, además de su salida completa y echo $?.
+### Compilación:
+```bash
+nasm -f elf64 clase01.asm -o clase01.o
+```
+
+### Enlazado:
+```bash
+ld clase01.o -o clase01
+```
+
+### Salida del programa:
+```
+LA LEYENDA DEL REGISTRO v0.1
+Bienvenido, heroe. Tu aventura empieza aqui.
+El sistema operativo te despidio con elegancia (código 0).
+```
+
+### Código de salida (`echo $?`):
+```
+0
+```
+
+### A.1.2
+Para este ejercicio pide ejecutar `strace -e trace=write,exit_group ./clase01 2> trace1.txt` y pegar el strace.
+
+Comando:
+```bash
+strace -e trace=write,exit_group ./clase01 2> trace1.txt
+```
+
+Contenido de `trace1.txt` ejecutado con cat:
+```
+write(1, "LA LEYENDA DEL REGISTRO v0.1\n", 29) = 29
+write(1, "Bienvenido, heroe. Tu aventura e"..., 45) = 45
+write(1, "El sistema operativo te despidio"..., 60) = 60
++++ exited with 0 +++
+```
 ---
 ## A2 Solucion - Nombre del Heroe
 ### A.2.1
