@@ -59,7 +59,11 @@ Compila y ejecuta la clase 2 con **tres** nombres distintos:
 
 Documenta la salida de cada caso en `entrega.md`.
 
-[RESOLVER AQUÍ: ¿Qué ocurre en el caso 3? Explica por qué, citando qué línea del `.asm` lo provoca.]
+[RESOLVER AQUÍ: ¿Qué ocurre en el caso 3? Explica por qué, citando qué línea del `.asm` lo provoca.
+
+En el caso 3 lo que pasa es que como en el programa estrictamente se van a leer solo 32 bytes e ingresamos un nombre mayor a este valor. Entonces como ingrese: simonlopezestradaforeronietowerprograma solo se va a mostrar hasta despues de la p y el rograma que queda luego la terminal ejecuta lo que por asi decirlo quedo pendiente.
+
+La linea que lo provoca es la **mov rdx, 32** , y lo que dice es que lea como maximo 32 bytes ]
 
 ### A.2.2 (5 pts)
 Ejecuta `strace -e trace=read,write ./clase02` con un nombre de 10 letras (pega el `strace` en `entrega.md`) y responde:
@@ -68,7 +72,12 @@ Ejecuta `strace -e trace=read,write ./clase02` con un nombre de 10 letras (pega 
 2. ¿Por qué ese número y no 32 (el tamaño del buffer)?
 3. ¿En qué variable del código se guarda ese valor de retorno?
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: 
+1. La llamada `read` devuelve exactamente 11 bytes, puesto que la entrada tiene 10 caracteres mas el salto de linea.
+2. Porque `read` se encarga de leer los bytes que estan ingresando, mientras que los 32 son los que hay disponibles, siendo este mismo valor el "tope" por asi decirlo.
+3. Ese valor llega en el registro **RAX** cuando el syscall termina.
+
+]
 
 ### A.2.3 (5 pts) — Modificación obligatoria
 En tu copia de `clase02.asm`, cambia **dos** cosas y haz que siga compilando y ejecutando:
