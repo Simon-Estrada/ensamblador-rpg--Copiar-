@@ -44,7 +44,11 @@ Ejecuta `strace -e trace=write,exit_group ./clase01 2> trace1.txt` y responde (p
 2. ¿Cuál es el código de salida que devuelve `exit_group`?
 3. ¿Qué número de syscall usa `write`? (pista: mira la columna `syscall` o el `strace` completo).
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: 
+1. Hay 3 llamadas write, una por cada texto.
+2. El exit_group no aparece porque el programa llama directamente a exit (syscall 60). El código 0 se ve en la línea +++ exited with 0 +++
+3. write usa el syscall número 1, se ve en el código (mov rax, 1 antes de cada syscall) y en la tabla de la sección 3.2. strace normalmente muestra el nombre, no el número.
+]
 
 ---
 
@@ -59,11 +63,7 @@ Compila y ejecuta la clase 2 con **tres** nombres distintos:
 
 Documenta la salida de cada caso en `entrega.md`.
 
-[RESOLVER AQUÍ: ¿Qué ocurre en el caso 3? Explica por qué, citando qué línea del `.asm` lo provoca.
-
-En el caso 3 lo que pasa es que como en el programa estrictamente se van a leer solo 32 bytes e ingresamos un nombre mayor a este valor. Entonces como ingrese: simonlopezestradaforeronietowerprograma solo se va a mostrar hasta despues de la p y el rograma que queda luego la terminal ejecuta lo que por asi decirlo quedo pendiente.
-
-La linea que lo provoca es la **mov rdx, 32** , y lo que dice es que lea como maximo 32 bytes ]
+[RESOLVER AQUÍ: ¿Qué ocurre en el caso 3? Explica por qué, citando qué línea del `.asm` lo provoca.]
 
 ### A.2.2 (5 pts)
 Ejecuta `strace -e trace=read,write ./clase02` con un nombre de 10 letras (pega el `strace` en `entrega.md`) y responde:
@@ -72,12 +72,7 @@ Ejecuta `strace -e trace=read,write ./clase02` con un nombre de 10 letras (pega 
 2. ¿Por qué ese número y no 32 (el tamaño del buffer)?
 3. ¿En qué variable del código se guarda ese valor de retorno?
 
-[RESOLVER AQUÍ: 
-1. La llamada `read` devuelve exactamente 11 bytes, puesto que la entrada tiene 10 caracteres mas el salto de linea.
-2. Porque `read` se encarga de leer los bytes que estan ingresando, mientras que los 32 son los que hay disponibles, siendo este mismo valor el "tope" por asi decirlo.
-3. Ese valor llega en el registro **RAX** cuando el syscall termina.
-
-]
+[RESOLVER AQUÍ: ]
 
 ### A.2.3 (5 pts) — Modificación obligatoria
 En tu copia de `clase02.asm`, cambia **dos** cosas y haz que siga compilando y ejecutando:
@@ -159,9 +154,7 @@ Compílalo con `nasm -f elf64` y `ld`. Pega en `entrega.md` el código completo 
 - c) 60
 - d) 2
 
-[
-    RESOLVER AQUÍ: El numero de llamada al sistema para sys_write es el 1, por ende la respuesta correcta es la `b) 1` 
-]
+[RESOLVER AQUÍ: ]
 
 ---
 
@@ -172,7 +165,7 @@ Compílalo con `nasm -f elf64` y `ld`. Pega en `entrega.md` el código completo 
 - c) `rax`
 - d) `rdx`
 
-[RESOLVER AQUÍ: El numero del syscall se pone en el registro `RAX`, por lo tanto la respuesta correcta es la `c) rax`]
+[RESOLVER AQUÍ: ]
 
 ---
 
@@ -183,7 +176,7 @@ Compílalo con `nasm -f elf64` y `ld`. Pega en `entrega.md` el código completo 
 - c) `.bss`
 - d) `.rodata`
 
-[RESOLVER AQUÍ: Se usa en la seccion .bss, esta seccion se usa para declarar variables y reservar espacio. La respuesta correcta es `c) .bss` ]
+[RESOLVER AQUÍ: ]
 
 ---
 
@@ -194,7 +187,7 @@ Compílalo con `nasm -f elf64` y `ld`. Pega en `entrega.md` el código completo 
 - c) El tamaño del buffer
 - d) El código de error
 
-[RESOLVER AQUÍ: El valor de retorno de rax es la cantidad de bytes leidos realmente en el ejemplo de Gandalf son 7 caracteres mas el salto de linea, entonces el valor de retorno de rax seria 8. La respuesta correcta es `b)` ]
+[RESOLVER AQUÍ: ]
 
 ---
 
@@ -205,7 +198,7 @@ Compílalo con `nasm -f elf64` y `ld`. Pega en `entrega.md` el código completo 
 - c) `cmp` + `jge`
 - d) `sub`
 
-[RESOLVER AQUÍ: Al abrir el archivo de la clase 3 hay una linea que dice **cmp byte [v_used], 6 jge .elite**, esto quiere decir que el programa determina el nivel del heroe basandose en lo gastado contra el 6. La respuesra correcta es `c)`]
+[RESOLVER AQUÍ: ]
 
 ---
 

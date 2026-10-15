@@ -181,9 +181,9 @@ _start:
 
 **Preguntas guía durante la lectura** (haz que alguien responda antes de pasar):
 
-1. ¿Qué haría el kernel si `rdx` fuera mayor que la longitud real del texto?
+1. ¿Qué haría el kernel si `rdx` fuera mayor que la longitud real del texto? (imprimiría bytes de más, que serían basura o el texto siguiente)
 2. ¿Qué cambia entre la Acción 1 y la Acción 3? (Sólo `rsi` y `rdx`: el texto y su tamaño.)
-3. ¿Por qué `mov rax, 60` y no `mov rax, 1` en la última acción?
+3. ¿Por qué `mov rax, 60` y no `mov rax, 1` en la última acción? (porque 60 es exit y 1 es write, y ahi era necesario dar cierre)
 4. ¿Qué pasaría si elimináramos la línea `syscall` final? (El proceso seguiría vivo, sin terminar.)
 
 ---
