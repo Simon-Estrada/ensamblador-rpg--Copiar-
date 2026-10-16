@@ -267,7 +267,7 @@ _start:
 1. **¿Qué imprime el programa?**
 Imprime la palabra `HOLA` seguida de un salto de linea (`\n`, byte 10). Por lo tanto, en total se esta escribiendo **5 bytes**.
 
-2.**¿Con qué código de salida termina? ¿Qué significa ese código?**
+2. **¿Con qué código de salida termina? ¿Qué significa ese código?**
 Termina con el código de salida `3`. Esto significa que el programa esta retornando un valor de salida `3` al sistema operativo (especificado en `mov rdi, 3` antes de salir del sistema).
 
 3. **¿Cuántas llamadas al kernel (`syscall`) hay?**
@@ -306,7 +306,7 @@ _start:
 > clase 3 está ausente para que un número (0–9) se vuelva un carácter
 > imprimible?
 
-[RESOLVER AQUÍ:El programa está guardando directamente el valor númerico entero de `7` en la variable `d`. En la tabla ASCII, el byte `7` no es un número visible `7`, sino que es un cáracter de control no imprimible, que lo llaman **BEL** o más fácil de recordar **timbre**. Para que el programa muestre en la pantalla el carácter visible de `7`, tiene que convertir el entero a su código **ASCII** sumándole `48`, esto debido a que `0` en código **ASCII** equivale a 48, por lo que 7+48=55, que es el código de `7`. ]
+[RESOLVER AQUÍ: El programa está guardando directamente el valor númerico entero de `7` en la variable `d`. En la tabla ASCII, el byte `7` no es un número visible `7`, sino que es un cáracter de control no imprimible, que lo llaman **BEL** o más fácil de recordar **timbre**. Para que el programa muestre en la pantalla el carácter visible de `7`, tiene que convertir el entero a su código **ASCII** sumándole `48`, esto debido a que `0` en código **ASCII** equivale a 48, por lo que 7+48=55, que es el código de `7`. ]
 
 ---
 
