@@ -131,3 +131,77 @@ Eres bienvenido al reino de equestria, Gandalf
 Y tu nombre es digno de un poder supremo.
 ```
 > Aclarar que el nombre que se ingreso fue el solicitado **Gandalf**
+
+## A.4 - Crear desde cero
+Se solicito crear un programa el cual permitiera lo siguiente:
+1. Imprima `"Nombre: "` (sin salto de línea).
+2. Lea el nombre desde el teclado (buffer de 16 bytes en `.bss`).
+3. Imprima el nombre.
+4. Imprima un salto de línea.
+5. Termine con código de salida 0.
+
+Al final tambien se aclara que el programa debe usarse con el nombre Sauron para determinar la salida.
+
+El codigo completo que quedo dentro del archivo `examen/heroe.asm` es el siguiente:
+
+```
+global _start
+
+section .data
+    pregunta db "Nombre: "
+    len_pregunta equ $ - pregunta
+
+    newline db 10
+
+section .bss
+    buffer resb 16
+
+section .text
+_start:
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, pregunta
+    mov rdx, len_pregunta
+    syscall
+
+    mov rax, 0
+    mov rdi, 0
+    mov rsi, buffer
+    mov rdx, 16
+    syscall
+    mov rbx, rax
+
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, buffer
+    mov rdx, rbx
+    syscall
+
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, newline
+    mov rdx, 1
+    syscall
+
+    mov rax, 60
+    xor rdi, rdi
+    syscall
+```
+
+Se compilo con los comandos
+1. `nasm -f elf64 heroe.asm -o heroe.o`
+2. `ld heroe.o -o heroe`
+3. `./heroe`
+
+Y finalmente probamos con el nombre **Sauron**
+```
+simon@LAPTOP-RVE5FLUI:~/ensamblador-rpg--Copiar-/examen$ ./heroe
+Nombre: Sauron
+Sauron
+
+```
+Y si probamos el `echo $?` nos damos cuenta que efectivamente la salida es 0
+```
+simon@LAPTOP-RVE5FLUI:~/ensamblador-rpg--Copiar-/examen$ echo $?
+0
+```
