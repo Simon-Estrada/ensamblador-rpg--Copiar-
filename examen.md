@@ -303,25 +303,25 @@ _start:
 
 **1.** ¿Por qué en clase 2 se reserva `resb 32` para un nombre de "máximo 31 letras"?
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: Se reservan 32 bytes porque el nombre ocupa hasta 31 letras, y queda 1 byte para el salto de linea que el teclado agrega al presionar enter.]
 
 ---
 
 **2.** ¿Por qué la clase 2 quita el último byte (LF) del nombre antes de imprimirlo, usando `dec rax`?
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: ya que sys_read devuelve en rax la cantidad de bytes leídos, y eso incluye también el LF del enter, y con dec rax se resta 1 a esa longitud, así el write imprime solo las letras del nombre, sin el salto de línea.]
 
 ---
 
 **3.** En clase 3, ¿por qué el programa valida FUE y AGI por separado (0–9) **y además** valida que la suma sea ≤ 9?
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: Porque cada validación protege algo distinto, la validación por separado (0–9) verifica que lo que el usuario escribió sea realmente un dígito y no un carácter, y la validación de la suma (≤ 9) verifica que el resultado quepa en un solo dígito, porque se imprime con add al, 48, que solo da un carácter válido para valores de 0 a 9.]
 
 ---
 
 **4.** ¿Qué significa `equ $ - etiqueta` y por qué es útil en vez de contar los bytes a mano?
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: $ es la dirección actual del ensamblador y etiqueta es donde empieza el texto, así que $ - etiqueta es la distancia en bytes entre ambos, o sea la longitud del texto. Es útil porque el ensamblador la calcula solo, asi si se cambia el texto, la longitud se actualiza y no se rompe el rdx del write, además que contar a mano es propenso a errores.]
 
 ---
 
