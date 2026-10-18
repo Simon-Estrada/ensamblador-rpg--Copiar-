@@ -98,15 +98,22 @@ Compila la clase 3 y ejecútala con las **cinco** combinaciones de (FUE, AGI) de
 
 | Caso | FUE | AGI | ¿ELITE o NOVATO o ERROR? | Código salida (`$?`) |
 |------|-----|-----|--------------------------|----------------------|
-| 1    | 3   | 5   |                          |                      |
-| 2    | 0   | 9   |                          |                      |
-| 3    | 9   | 9   |                          |                      |
-| 4    | 0   | 0   |                          |                      |
-| 5    | `x` | 5   |                          |                      |
+| 1    | 3   | 5   |          ELITE           | 0                    |
+| 2    | 0   | 9   |          ELITE           | 0                    |
+| 3    | 9   | 9   |          ERROR           | 1                    |
+| 4    | 0   | 0   |          NOVATO          | 0                    |
+| 5    | `x` | 5   |          NOVATO          | 0                    |
 
 > Caso 5: en lugar de un dígito, escribe la letra `x`.
 
-[RESOLVER AQUÍ: ¿Qué hace el programa con la letra `x`? ¿Por qué no se rompe?]
+[RESOLVER AQUÍ: ¿Qué hace el programa con la letra `x`? ¿Por qué no se rompe?
+
+Cuando escribes la letra x, el programa no la acepta como un número. Antes de usar lo que escribiste, revisa que sea un dígito del 0 al 9. 
+para eso usa la tabla ASCII, donde cada carácter tiene un número. El '0' es el 48 y el '9' es el 57, por lo que cualquier dígito está entre esos dos valores. La x vale 120, que es mayor que 57, entonces el programa sabe que no es un dígito.
+Cuando eso pasa, salta a la parte del código que pone FUE en 0. Por eso en el caso 5 el programa muestra FUE:0 y calcula 0+5=5, que lo deja como NOVATO.
+No se rompe porque nunca intenta hacer cuentas con la x. La revisa primero, se da cuenta de que no sirve y la cambia por un 0. Así el programa sigue normal hasta el final y termina con código 0, sin errores.
+
+]
 
 ### A.3.2 (6 pts)
 Con `strace -e trace=write,read,exit_group ./clase03`, usando FUE=8, AGI=2 (pega el `strace` en `entrega.md`), responde:
@@ -115,7 +122,15 @@ Con `strace -e trace=write,read,exit_group ./clase03`, usando FUE=8, AGI=2 (pega
 2. ¿Cuántas llamadas `read` hay?
 3. ¿Por qué `read` devuelve siempre `2` y no `1`?
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ:
+
+1. Hay 5 llamadas `write`. La primera escribe el título "LA LEYENDA DEL REGISTRO v0.3", la segunda la explicación de los 9 puntos, la tercera la pregunta de la fuerza "FUE (fuerza, 0 a 9): ", la cuarta la pregunta de la agilidad "AGI (agilidad, 0 a 9): " y la quinta el mensaje "Error: no te alcanzan los 9 puntos.". No se alcanzan a imprimir los atributos porque 8 + 2 da 10, que es más de los 9 puntos permitidos, y el programa termina antes con código 1.
+
+2. Hay 2 llamadas `read`, una cuando pide la fuerza y otra cuando pide la agilidad.
+
+3. `read` devuelve 2 porque cuando escribimos un número y presionamos Enter, en realidad se mandan dos cosas: el dígito y el salto de línea (byte 10). Por eso el buffer `buf` se reservó de 2 bytes, para que quepan los dos. También vale la pena aclarar que `exit_group` no aparece en el strace porque el programa termina con la syscall 60 (`exit`) y no con `exit_group`, por eso solo se ve `+++ exited with 1 +++`.
+
+ ]
 
 ### A.3.3 (6 pts) — Modificación obligatoria
 Implementa el **Ejercicio 1** de la clase 3 ("El heroe se enfada"): si FUE es 0, muestra la frase
@@ -213,27 +228,51 @@ Compílalo con `nasm -f elf64` y `ld`. Pega en `entrega.md` el código completo 
 > Marca V o F. Si es F, escribe la corrección. Una respuesta correcta sin justificación vale 1 pt.
 
 **1.** `db` declara 8 bits (1 byte) por elemento de datos.
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ:
+
+**Verdadero.** `db` significa "define byte", y cada elemento que se declara con `db` ocupa 1 byte, o sea 8 bits. Por ejemplo, en `titulo db "LA LEYENDA DEL REGISTRO v0.3", 10` cada letra ocupa un byte, y el 10 del salto de línea también ocupa uno.
+
+ ]
 
 ---
 
 **2.** `mov rax, 60` seguido de `syscall` es la forma estándar de terminar un programa en este curso.
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: 
+
+**Verdadero.** El 60 es el número de la syscall `exit` en Linux x86-64, y así terminan todos los programas del curso. Antes del `syscall` también se pone en `rdi` el código de salida, por ejemplo `mov rdi, 0` cuando todo salió bien o `mov rdi, 1` cuando hubo error, como en la clase 3. Ese es el número que después vemos con `echo $?`.
+
+]
 
 ---
 
 **3.** `resb 32` escribe 32 bytes de ceros en el binario.
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: 
+
+**Falso.** `resb 32` no escribe nada en el binario, solo reserva 32 bytes de espacio en la sección `.bss`. Ese espacio no ocupa lugar en el archivo ejecutable, y es el sistema operativo el que lo aparta en memoria (lleno de ceros) cuando el programa arranca.
+
+**Corrección:** `resb 32` reserva 32 bytes en `.bss` sin ocupar espacio en el binario.
+
+]
 
 ---
 
 **4.** En clase 2, el valor de `lon` (la longitud leída) viene de un `equ` fijo calculado por el ensamblador.
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: 
+
+**Falso.** El `equ` se calcula al ensamblar, antes de que el programa se ejecute, así que solo sirve para cosas fijas como el largo de un texto que ya está escrito en el código. El nombre lo escribe el usuario mientras el programa corre, así que su largo no se puede saber de antemano.
+
+**Corrección:** el valor de `lon` viene del registro `rax`, que es lo que devuelve `sys_read` con la cantidad de bytes que se leyeron. Luego se le resta 1 con `dec rax` para quitar el salto de línea del Enter.
+
+]
 
 ---
 
 **5.** `add al, 48` convierte un dígito numérico (0–9) en su carácter ASCII imprimible.
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: 
+
+**Verdadero.** En la tabla ASCII el carácter `'0'` vale 48, `'1'` vale 49, y así hasta `'9'`, que vale 57. Entonces si a un número del 0 al 9 le sumamos 48, obtenemos el código de su carácter. Por ejemplo, 3 + 48 = 51, que es `'3'`. Es justo lo que hace la clase 3 antes de imprimir FUE, AGI y VID. Al leer se hace lo contrario: se resta 48 para pasar del carácter al número.
+
+]
 
 ---
 
