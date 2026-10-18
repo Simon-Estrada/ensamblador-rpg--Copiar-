@@ -132,6 +132,188 @@ Y tu nombre es digno de un poder supremo.
 ```
 > Aclarar que el nombre que se ingreso fue el solicitado **Gandalf**
 
+---
+## A3 Solucion - Los atributos del heroe
+### A.3.1
+Para este ejercicio se pedia compilar la clase 3 y ejecutarla con cinco combinaciones de FUE y AGI, anotando si el heroe queda ELITE, NOVATO o ERROR, y el codigo de salida.
+
+Primero tuve que instalar nasm con `sudo apt install nasm`. Luego se compilo con:
+```bash
+nasm -f elf64 clase03.asm -o clase03.o
+ld clase03.o -o clase03
+```
+
+### Caso 1: FUE = 3, AGI = 5
+```
+dani@Dani-LAPTOP:~/ensamblador-rpg--Copiar-/clase-03$ ./clase03
+LA LEYENDA DEL REGISTRO v0.3
+Tienes 9 puntos para repartir. El resto se vuelve vida (VID).
+FUE (fuerza, 0 a 9): 3
+AGI (agilidad, 0 a 9): 5
+El heroe despierta como ELITE del reino.
+FUE: 3
+AGI: 5
+VID: 1
+Puntos gastados: 8
+Nivel: 2
+Los atributos quedaron grabados en los registros del heroe.
+dani@Dani-LAPTOP:~/ensamblador-rpg--Copiar-/clase-03$ echo $?
+0
+```
+
+### Caso 2: FUE = 0, AGI = 9
+```
+dani@Dani-LAPTOP:~/ensamblador-rpg--Copiar-/clase-03$ ./clase03
+LA LEYENDA DEL REGISTRO v0.3
+Tienes 9 puntos para repartir. El resto se vuelve vida (VID).
+FUE (fuerza, 0 a 9): 0
+AGI (agilidad, 0 a 9): 9
+El heroe despierta como ELITE del reino.
+FUE: 0
+AGI: 9
+VID: 0
+Puntos gastados: 9
+Nivel: 2
+Los atributos quedaron grabados en los registros del heroe.
+dani@Dani-LAPTOP:~/ensamblador-rpg--Copiar-/clase-03$ echo $?
+0
+```
+
+### Caso 3: FUE = 9, AGI = 9
+```
+dani@Dani-LAPTOP:~/ensamblador-rpg--Copiar-/clase-03$ ./clase03
+LA LEYENDA DEL REGISTRO v0.3
+Tienes 9 puntos para repartir. El resto se vuelve vida (VID).
+FUE (fuerza, 0 a 9): 9
+AGI (agilidad, 0 a 9): 9
+Error: no te alcanzan los 9 puntos.
+dani@Dani-LAPTOP:~/ensamblador-rpg--Copiar-/clase-03$ echo $?
+1
+```
+Aqui la suma da 18, que supera los 9 puntos, por eso el programa muestra el error y sale con codigo 1.
+
+### Caso 4: FUE = 0, AGI = 0
+```
+dani@Dani-LAPTOP:~/ensamblador-rpg--Copiar-/clase-03$ ./clase03
+LA LEYENDA DEL REGISTRO v0.3
+Tienes 9 puntos para repartir. El resto se vuelve vida (VID).
+FUE (fuerza, 0 a 9): 0
+AGI (agilidad, 0 a 9): 0
+El heroe sigue siendo NOVATO: hay margen para crecer.
+FUE: 0
+AGI: 0
+VID: 9
+Puntos gastados: 0
+Nivel: 1
+Los atributos quedaron grabados en los registros del heroe.
+dani@Dani-LAPTOP:~/ensamblador-rpg--Copiar-/clase-03$ echo $?
+0
+```
+
+### Caso 5: FUE = x, AGI = 5
+```
+dani@Dani-LAPTOP:~/ensamblador-rpg--Copiar-/clase-03$ ./clase03
+LA LEYENDA DEL REGISTRO v0.3
+Tienes 9 puntos para repartir. El resto se vuelve vida (VID).
+FUE (fuerza, 0 a 9): x
+AGI (agilidad, 0 a 9): 5
+El heroe sigue siendo NOVATO: hay margen para crecer.
+FUE: 0
+AGI: 5
+VID: 4
+Puntos gastados: 5
+Nivel: 1
+Los atributos quedaron grabados en los registros del heroe.
+dani@Dani-LAPTOP:~/ensamblador-rpg--Copiar-/clase-03$ echo $?
+0
+```
+Como la `x` no es un digito, el programa la toma como 0.
+
+### A.3.2
+Para este ejercicio se pedia ejecutar `strace -e trace=write,read,exit_group ./clase03` con FUE = 8 y AGI = 2, y pegar el strace.
+
+Primero verifique que strace estuviera instalado con `strace -V` (version 6.19). Luego ejecute:
+```bash
+strace -e trace=write,read,exit_group ./clase03
+```
+
+**La salida fue la siguiente**
+```
+dani@Dani-LAPTOP:~/ensamblador-rpg--Copiar-/clase-03$ strace -e trace=write,read,exit_group ./clase03
+write(1, "LA LEYENDA DEL REGISTRO v0.3\n", 29LA LEYENDA DEL REGISTRO v0.3
+) = 29
+write(1, "Tienes 9 puntos para repartir. E"..., 62Tienes 9 puntos para repartir. El resto se vuelve vida (VID).
+) = 62
+write(1, "FUE (fuerza, 0 a 9): ", 21FUE (fuerza, 0 a 9): ) = 21
+read(08
+, "8\n", 2)                       = 2
+write(1, "AGI (agilidad, 0 a 9): ", 23AGI (agilidad, 0 a 9): ) = 23
+read(02
+, "2\n", 2)                       = 2
+write(1, "Error: no te alcanzan los 9 punt"..., 36Error: no te alcanzan los 9 puntos.
+) = 36
++++ exited with 1 +++
+```
+Como 8 + 2 = 10 supera los 9 puntos, el programa termina en error con codigo 1 y no imprime los atributos. Se ve todo mezclado porque strace y el programa escriben en la misma pantalla.
+
+### A.3.3
+Para este ejercicio se pedia implementar el Ejercicio 1 de la clase 3 ("El heroe se enfada"): si FUE es 0, el programa debe mostrar la frase "Un heroe sin fuerza no es heroe." y seguir normal.
+
+Primero hice una copia del archivo original para no dañarlo:
+```bash
+cp clase03.asm clase03_mod.asm
+```
+
+En la seccion `.data`, debajo de `salto db 10`, agregue la frase:
+```nasm
+    sin_fuerza db "Un heroe sin fuerza no es heroe.", 10
+    len_sin_fuerza equ $ - sin_fuerza
+```
+
+Y en el codigo, justo despues de `.fue_leido:`, agregue la comparacion:
+```nasm
+    ; ---------- Ejercicio 1: el heroe se enfada ----------
+    cmp byte [v_fue], 0
+    je .sin_fuerza
+    jmp .con_fuerza
+.sin_fuerza:
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, sin_fuerza
+    mov rdx, len_sin_fuerza
+    syscall
+.con_fuerza:
+```
+El `cmp` compara la fuerza con 0. Si es 0, el `je` salta a `.sin_fuerza`, que imprime la frase, y despues el programa sigue normal desde `.con_fuerza`. Si la fuerza no es 0, el `jmp` se salta la frase y sigue directo.
+
+Se compilo con:
+```bash
+nasm -f elf64 clase03_mod.asm -o clase03_mod.o
+ld clase03_mod.o -o clase03_mod
+```
+
+Salida con FUE = 0 y AGI = 3:
+```
+dani@Dani-LAPTOP:~/ensamblador-rpg--Copiar-/clase-03$ ./clase03_mod
+LA LEYENDA DEL REGISTRO v0.3
+Tienes 9 puntos para repartir. El resto se vuelve vida (VID).
+FUE (fuerza, 0 a 9): 0
+Un heroe sin fuerza no es heroe.
+AGI (agilidad, 0 a 9): 3
+El heroe sigue siendo NOVATO: hay margen para crecer.
+FUE: 0
+AGI: 3
+VID: 6
+Puntos gastados: 3
+Nivel: 1
+Los atributos quedaron grabados en los registros del heroe.
+dani@Dani-LAPTOP:~/ensamblador-rpg--Copiar-/clase-03$ echo $?
+0
+```
+La frase aparece justo despues de ingresar FUE = 0, el programa sigue imprimiendo los atributos y termina con codigo 0.
+
+---
+
 ## A.4 - Crear desde cero
 Se solicito crear un programa el cual permitiera lo siguiente:
 1. Imprima `"Nombre: "` (sin salto de línea).
