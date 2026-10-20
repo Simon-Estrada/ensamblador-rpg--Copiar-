@@ -380,7 +380,13 @@ _start:
 **1. (2 pts)** Escribe el bloque exacto (registros + `syscall`) para **imprimir la cadena**
 `"FIN\n"` (con salto de línea) usando `sys_write`. Supón que la cadena está en la etiqueta `fin` y su longitud en `len_fin`.
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: 
+mov rax, 1          ; syscall 1: sys_write (escribir en pantalla)
+mov rdi, 1          ; fd 1: stdout (pantalla)
+mov rsi, fin        ; dirección donde está guardado "FIN\n"
+mov rdx, len_fin    ; longitud de la cadena
+syscall             ; llamada al kernel
+]
 
 ---
 
@@ -390,7 +396,26 @@ _start:
 - Validar que sea un dígito entre `'0'` (48) y `'9'` (57); si no lo es, saltar a una etiqueta `.mal`.
 - Si es dígito, convertirlo a número (restando 48) y guardarlo en la variable numérica `n` (1 byte, de `.bss`).
 
-[RESOLVER AQUÍ: ]
+[RESOLVER AQUÍ: 
+; 1. Leer hasta 2 bytes desde el teclado (1 dígito + Enter)
+    mov rax, 0          ; syscall 0: sys_read
+    mov rdi, 0          ; fd 0: stdin (teclado)
+    mov rsi, b          ; buffer 'b' reservado en .bss
+    mov rdx, 2          ; lee máximo 2 bytes
+    syscall
+
+    ; 2. Validar que sea un dígito entre '0' (48) y '9' (57)
+    cmp rax, 0
+    je .mal             ; Si no se leyó nada, salta a .mal
+    cmp byte [b], 48    ; ¿Es menor que el caracter '0'?
+    jb .mal             ; Si es menor, salta a .mal
+    cmp byte [b], 57    ; ¿Es mayor que el caracter '9'?
+    ja .mal             ; Si es mayor, salta a .mal
+
+    ; 3. Convertir ASCII a entero y guardar en 'n'
+    mov al, byte [b]    ; Copia el caracter leído
+    sub al, 48          ; Resta 48 para convertirlo de ASCII a número entero (0-9)
+    mov [n], al         ; Guarda el número en la variable 'n' de .bss]
 
 ---
 
