@@ -1,3 +1,9 @@
+# integrantes:
+- Luna Sofia Oviedo Rios
+- David Alejandro Henao Jaramillo
+- Simón Lopez Estrada
+- Laura Daniela Vega Herrera
+
 # Solucion Parcial 1 Fundamentos
 ## A1 Solucion - El despertar
 ### A.1.1
